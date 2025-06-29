@@ -1,0 +1,81 @@
+body {
+  font-family: sans-serif;
+  background: #f0f0f0;
+  text-align: center;
+  margin-top: 50px;
+}
+
+.container {
+  background: white;
+  padding: 20px;
+  width: 100%;
+  max-width: 90%;
+  margin: auto;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+button {
+  margin: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 6px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+#cubeDisplay {
+  margin-top: 20px;
+  font-family: monospace;
+  white-space: pre-wrap;
+}
+.steps {
+  width: 100%;
+  /* background-color: red; */
+  padding: 20px 0;
+}
+.steps h2 {
+  color: rgb(101, 101, 232);
+}
+.steps div {
+  margin-top: 10px;
+}
+
+#flatCubeLine {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 20px;
+  gap: 2px;
+}
+
+.flat-cell {
+  width: 20px;
+  height: 20px;
+  border: 1px solid #000;
+}
+
+.w {
+  background-color: white;
+}
+.r {
+  background-color: red;
+}
+.g {
+  background-color: green;
+}
+.y {
+  background-color: yellow;
+}
+.o {
+  background-color: orange;
+}
+.b {
+  background-color: blue;
+}
