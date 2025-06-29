@@ -13,25 +13,70 @@ class RubiksCube {
 
   rotateFace(face, clockwise = true) {
     const f = this.faces[face];
+    // console.log("f",f)
     const map = clockwise
       ? [6, 3, 0, 7, 4, 1, 8, 5, 2]
       : [2, 5, 8, 1, 4, 7, 0, 3, 6];
-    const newFace = map.map(i => f[i]);
+    const newFace = map.map((i) => f[i]);
     this.faces[face] = newFace;
   }
+  /*
+  f = ['g', 'g', 'g',
+      'g', 'g', 'g',
+      'g', 'g', 'g'];
+
+      f[0] to f[8] is like this
+      [0 1 2]
+      [3 4 5]
+      [6 7 8]
+
+[0 1 2]       [6 3 0]
+[3 4 5]  -->  [7 4 1]
+[6 7 8]       [8 5 2]
+    */
 
   rotateEdges(face, clockwise = true) {
     const adjacent = {
-      F: [["U", [6, 7, 8]], ["R", [0, 3, 6]], ["D", [2, 1, 0]], ["L", [8, 5, 2]]],
-      B: [["U", [2, 1, 0]], ["L", [0, 3, 6]], ["D", [6, 7, 8]], ["R", [8, 5, 2]]],
-      U: [["B", [2, 1, 0]], ["R", [2, 1, 0]], ["F", [2, 1, 0]], ["L", [2, 1, 0]]],
-      D: [["F", [6, 7, 8]], ["R", [6, 7, 8]], ["B", [6, 7, 8]], ["L", [6, 7, 8]]],
-      L: [["U", [0, 3, 6]], ["F", [0, 3, 6]], ["D", [0, 3, 6]], ["B", [8, 5, 2]]],
-      R: [["U", [8, 5, 2]], ["B", [0, 3, 6]], ["D", [8, 5, 2]], ["F", [8, 5, 2]]],
+      F: [
+        ["U", [6, 7, 8]],
+        ["R", [0, 3, 6]],
+        ["D", [2, 1, 0]],
+        ["L", [8, 5, 2]],
+      ],
+      B: [
+        ["U", [2, 1, 0]],
+        ["L", [0, 3, 6]],
+        ["D", [6, 7, 8]],
+        ["R", [8, 5, 2]],
+      ],
+      U: [
+        ["B", [2, 1, 0]],
+        ["R", [2, 1, 0]],
+        ["F", [2, 1, 0]],
+        ["L", [2, 1, 0]],
+      ],
+      D: [
+        ["F", [6, 7, 8]],
+        ["R", [6, 7, 8]],
+        ["B", [6, 7, 8]],
+        ["L", [6, 7, 8]],
+      ],
+      L: [
+        ["U", [0, 3, 6]],
+        ["F", [0, 3, 6]],
+        ["D", [0, 3, 6]],
+        ["B", [8, 5, 2]],
+      ],
+      R: [
+        ["U", [8, 5, 2]],
+        ["B", [0, 3, 6]],
+        ["D", [8, 5, 2]],
+        ["F", [8, 5, 2]],
+      ],
     };
 
     const edges = adjacent[face];
-    const temp = edges.map(([f, idx]) => idx.map(i => this.faces[f][i]));
+    const temp = edges.map(([f, idx]) => idx.map((i) => this.faces[f][i]));
     const rotated = clockwise ? [3, 0, 1, 2] : [1, 2, 3, 0];
 
     for (let i = 0; i < 4; i++) {
@@ -42,6 +87,14 @@ class RubiksCube {
       });
     }
   }
+
+  /*
+U[6,7,8] → R[0,3,6]
+R[0,3,6] → D[2,1,0]
+D[2,1,0] → L[8,5,2]
+L[8,5,2] → U[6,7,8]
+
+*/
 
   rotate(face, clockwise = true) {
     this.moveHistory.push({ face, clockwise });
@@ -54,8 +107,10 @@ class RubiksCube {
     for (let i = 0; i < moves; i++) {
       const f = faces[Math.floor(Math.random() * 6)];
       const dir = Math.random() > 0.5;
+      console.log("f and dir", f, dir);
       this.rotate(f, dir);
     }
+    console.log("scrable history", this.moveHistory);
   }
 
   solveStepByStep() {
@@ -74,7 +129,9 @@ class RubiksCube {
       this.rotate(move.face, !move.clockwise);
 
       const log = document.createElement("div");
-      log.textContent = `Step ${step + 1}: Undo ${move.face} (${!move.clockwise ? "clockwise" : "counter"}) → ${this.stringify()}`;
+      log.textContent = `Step ${step + 1}: Undo ${move.face} (${
+        !move.clockwise ? "clockwise" : "counter"
+      }) → ${this.stringify()}`;
       document.getElementById("stepsLog").appendChild(log);
 
       this.display();
@@ -83,8 +140,12 @@ class RubiksCube {
   }
 
   stringify() {
-    return ["U", "R", "F", "D", "L", "B"].map(f => this.faces[f].join("")).join("");
+    return ["U", "R", "F", "D", "L", "B"]
+      .map((f) => this.faces[f].join(""))
+      .join("");
   }
+  // ["wwwwwwwww", "rrrrrrrrr", "ggggggggg", "yyyyyyyyy", "ooooooooo", "bbbbbbbbb"]
+  // "wwwwwwwwwrrrrrrrrrgggggggggyyyyyyyyyooooooooobbbbbbbbb"
 
   displayFlatCubeLine(str) {
     const container = document.getElementById("flatCubeLine");
@@ -98,17 +159,6 @@ class RubiksCube {
 
   display() {
     const str = this.stringify();
-    const faceOrder = ["U", "R", "F", "D", "L", "B"];
-    for (let face of faceOrder) {
-      const container = document.getElementById(face);
-      if (!container) continue;
-      container.innerHTML = "";
-      this.faces[face].forEach((color) => {
-        const cell = document.createElement("div");
-        cell.className = `cube-cell ${color}`;
-        container.appendChild(cell);
-      });
-    }
     this.displayFlatCubeLine(str);
   }
 }
@@ -124,3 +174,5 @@ document.getElementById("scrambleBtn").addEventListener("click", () => {
 document.getElementById("solveBtn").addEventListener("click", () => {
   cube.solveStepByStep();
 });
+
+console.log(cube.faces);
